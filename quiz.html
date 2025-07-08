@@ -10,21 +10,14 @@
     header a { color: #fff; text-decoration: none; font-size: 22px; }
     header h1 { font-size: 18px; margin: 0; }
     header .right { display: flex; align-items: center; font-size: 16px; }
-
     .container { padding: 20px; }
-
     .question-box {
       background: #1e1e1e;
       padding: 20px;
       border-radius: 8px;
       margin-bottom: 20px;
     }
-
-    .question {
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
-
+    .question { font-size: 18px; margin-bottom: 15px; }
     .option {
       background: #222;
       padding: 14px;
@@ -36,11 +29,7 @@
       font-size: 16px;
       border: 1px solid #333;
     }
-
-    .option:hover {
-      background: #333;
-    }
-
+    .option:hover { background: #333; }
     .option span {
       display: inline-block;
       width: 30px;
@@ -52,14 +41,12 @@
       line-height: 30px;
       margin-right: 12px;
     }
-
     .scorebar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 10px 0;
     }
-
     .btn-next {
       display: inline-block;
       padding: 12px 20px;
@@ -70,9 +57,7 @@
       font-size: 16px;
       font-weight: bold;
     }
-
     .btn-next:hover { background: #ffd633; }
-
     .score-green {
       background: #4caf50;
       color: #000;
@@ -80,7 +65,6 @@
       border-radius: 20px;
       font-size: 14px;
     }
-
     .score-red {
       background: #f44336;
       color: #000;
@@ -88,7 +72,6 @@
       border-radius: 20px;
       font-size: 14px;
     }
-
   </style>
 </head>
 <body>
@@ -103,13 +86,11 @@
 </header>
 
 <div class="container">
-
   <div class="question-box">
     <div class="question" id="questionText">પ્રશ્ન લોડ થઇ રહ્યો છે...</div>
-
-    <div class="option" onclick="selectOption(1)"><span>1</span> વિકલ્પ 1</div>
-    <div class="option" onclick="selectOption(2)"><span>2</span> વિકલ્પ 2</div>
-    <div class="option" onclick="selectOption(3)"><span>3</span> વિકલ્પ 3</div>
+    <div class="option" id="optionA" onclick="selectOption('A')"><span>A</span> વિકલ્પ A</div>
+    <div class="option" id="optionB" onclick="selectOption('B')"><span>B</span> વિકલ્પ B</div>
+    <div class="option" id="optionC" onclick="selectOption('C')"><span>C</span> વિકલ્પ C</div>
   </div>
 
   <div class="scorebar">
@@ -119,23 +100,25 @@
     </div>
     <a href="#" class="btn-next" onclick="nextQuestion()">આગળનો પ્રશ્ન →</a>
   </div>
-
 </div>
 
 <script>
-  let questions = [];
+  let allQuestions = [];
+  let selectedQuestions = [];
   let currentQuestionIndex = 0;
   let timer = 45;
   let correct = 0;
   let wrong = 0;
   let countdown;
+  let optionMap = {};
 
   function startQuiz() {
     fetch('questions.json')
       .then(res => res.json())
       .then(data => {
-        questions = data.questions;
-        document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+        allQuestions = data.questions;
+        selectedQuestions = shuffleArray(allQuestions).slice(0, 15);
+        document.getElementById("questionNo").textContent = `1/${selectedQuestions.length}`;
         showQuestion();
         startTimer();
       });
@@ -155,18 +138,28 @@
   }
 
   function showQuestion() {
-    let q = questions[currentQuestionIndex];
+    let q = selectedQuestions[currentQuestionIndex];
     document.getElementById("questionText").textContent = `પ્ર. ${currentQuestionIndex + 1}: ${q.question}`;
-    document.querySelectorAll(".option").forEach((opt, index) => {
-      opt.innerHTML = `<span>${index + 1}</span> ${q.options[index]}`;
-      opt.onclick = () => selectOption(index + 1);
-    });
+
+    // Shuffle options for this question
+    let shuffledOptions = shuffleArray(q.options.slice());
+    optionMap = {
+      'A': shuffledOptions[0],
+      'B': shuffledOptions[1],
+      'C': shuffledOptions[2]
+    };
+
+    document.getElementById("optionA").innerHTML = `<span>A</span> ${optionMap['A']}`;
+    document.getElementById("optionB").innerHTML = `<span>B</span> ${optionMap['B']}`;
+    document.getElementById("optionC").innerHTML = `<span>C</span> ${optionMap['C']}`;
   }
 
-  function selectOption(optionNo) {
+  function selectOption(choice) {
     clearInterval(countdown);
-    let correctAnswer = questions[currentQuestionIndex].answer;
-    if (optionNo === correctAnswer) {
+    let q = selectedQuestions[currentQuestionIndex];
+    let selectedText = optionMap[choice];
+    let correctAnswerText = q.options[q.answer - 1];
+    if (selectedText === correctAnswerText) {
       correct++;
       document.getElementById("correctScore").textContent = `✔️ ${correct}`;
     } else {
@@ -178,13 +171,21 @@
   function nextQuestion() {
     clearInterval(countdown);
     currentQuestionIndex++;
-    if (currentQuestionIndex >= questions.length) {
-      window.location.href = `result.html?correct=${correct}&total=${questions.length}`;
+    if (currentQuestionIndex >= selectedQuestions.length) {
+      window.location.href = `result.html?correct=${correct}&total=${selectedQuestions.length}`;
     } else {
-      document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+      document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${selectedQuestions.length}`;
       showQuestion();
       startTimer();
     }
+  }
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   }
 
   startQuiz();
