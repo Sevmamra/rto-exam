@@ -2,10 +2,15 @@
 <html lang="gu">
 <head>
   <meta charset="UTF-8">
-  <title>Result</title>
+  <title>પરીક્ષા પરિણામ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #fff; text-align: center; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: #000;
+    }
     .result-box {
       padding: 20px;
       min-height: 100vh;
@@ -14,53 +19,75 @@
       justify-content: center;
       align-items: center;
     }
-    .result-box.pass { background: #8bc34a; color: #000; }
-    .result-box.fail { background: #f44336; color: #000; }
-    h1 { font-size: 28px; margin-bottom: 15px; }
-    p { font-size: 16px; margin: 0 10px 20px; }
-    .score { font-size: 26px; font-weight: bold; margin: 10px 0; }
-    .result-img { width: 150px; margin: 20px 0; }
+    .result-box.pass { background: #8bc34a; }
+    .result-box.fail { background: #f44336; }
+    h1 {
+      font-size: 32px;
+      margin: 20px 0;
+    }
+    p {
+      font-size: 18px;
+      margin: 10px 0 20px;
+    }
+    .score {
+      font-size: 26px;
+      font-weight: bold;
+      margin: 10px 0 20px;
+    }
+    .result-img {
+      width: 180px;
+      margin: 25px 0;
+    }
     .btn {
-      display: inline-block; padding: 12px 20px; margin: 5px;
-      background: #fff; color: #000; border-radius: 25px;
-      text-decoration: none; font-size: 16px;
+      display: inline-block;
+      padding: 14px 24px;
+      margin: 10px;
+      background: #fff;
+      color: #000;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .btn:hover {
+      background: #f5f5f5;
     }
   </style>
 </head>
 <body>
 
 <div id="resultContainer" class="result-box">
-  <h1> પરિણામ</h1>
-  <p>તમે પરીક્ષા આપી છે.</p>
+  <h1>પરિણામ લોડ થઇ રહ્યું છે...</h1>
 </div>
 
 <script>
-  // Result data (yahan quiz se values aani chahiye)
-  const correct = 9;
-  const total = 15;
+  const urlParams = new URLSearchParams(window.location.search);
+  const correct = parseInt(urlParams.get('correct')) || 0;
+  const total = parseInt(urlParams.get('total')) || 0;
 
   const resultBox = document.getElementById("resultContainer");
-  let html = "";
 
   if(correct >= 11){
     resultBox.classList.add("pass");
-    html += `<h1>અભિનંદન!</h1>`;
-    html += `<p>તમે ડ્રાઇવિંગ લાયસન્સની પરીક્ષા પાસ કરી છે.</p>`;
-    html += `<div class="score">${correct} / ${total}</div>`;
-    html += `<img class="result-img" src="pass.png" alt="pass">`;
-    html += `<a class="btn" href="index.html">મુખ્ય મેનુ</a>`;
-    html += `<a class="btn" href="quiz.html">ફરી પ્રયત્ન કરો</a>`;
+    resultBox.innerHTML = `
+      <h1>અભિનંદન!</h1>
+      <p>તમે ડ્રાઇવિંગ લાયસન્સની પરીક્ષા પાસ કરી છે.</p>
+      <div class="score">✔️ ${correct} / ${total}</div>
+      <img class="result-img" src="pass.png" alt="Pass">
+      <a class="btn" href="index.html">મુખ્ય મેનુ</a>
+      <a class="btn" href="quiz.html">ફરી પ્રયત્ન કરો</a>
+    `;
   } else {
     resultBox.classList.add("fail");
-    html += `<h1>નાપાસ!</h1>`;
-    html += `<p>માફ કરો, તમે ડ્રાઇવિંગ પરીક્ષા નાપાસ થયા છો. અમે તમને પ્રશ્ન બેંકમાંથી વાંચવાની ભલામણ કરીએ છીએ.</p>`;
-    html += `<div class="score">${correct} / ${total}</div>`;
-    html += `<img class="result-img" src="fail.png" alt="fail">`;
-    html += `<a class="btn" href="index.html">મુખ્ય મેનુ</a>`;
-    html += `<a class="btn" href="quiz.html">ફરી પ્રયત્ન કરો</a>`;
+    resultBox.innerHTML = `
+      <h1>નાપાસ!</h1>
+      <p>માફ કરો, તમે ડ્રાઇવિંગ લાયસન્સની પરીક્ષા નાપાસ થયા છો.</p>
+      <div class="score">❌ ${correct} / ${total}</div>
+      <img class="result-img" src="fail.png" alt="Fail">
+      <a class="btn" href="index.html">મુખ્ય મેનુ</a>
+      <a class="btn" href="quiz.html">ફરી પ્રયત્ન કરો</a>
+    `;
   }
-
-  resultBox.innerHTML = html;
 </script>
 
 </body>
