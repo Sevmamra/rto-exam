@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <title>પરીક્ષા</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #fff; }
+        header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: #222; }
+        header h1 { font-size: 18px; margin: 0; }
+        .timer { background: #ffcc00; color: #000; padding: 5px 10px; border-radius: 20px; font-weight: bold; }
+        .container { padding: 20px; }
+        .question-box { background: #1e1e1e; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .question-box h2 { margin-top: 0; font-size: 18px; }
+        .options { margin: 15px 0; }
+        .option-btn {
+            background: #2c2c2c; color: #fff; border: 1px solid #444;
+            border-radius: 5px; padding: 12px; margin-bottom: 10px; text-align: left;
+            display: flex; align-items: center; font-size: 16px; cursor: pointer;
+        }
+        .option-btn span {
+            display: inline-block; width: 25px; height: 25px; 
+            border: 1px solid #ccc; border-radius: 50%; 
+            text-align: center; line-height: 25px; margin-right: 15px;
+        }
+        .score-bar { display: flex; justify-content: space-between; padding: 10px 20px; background: #222; }
+        .score-bar .correct { background: #4caf50; padding: 5px 12px; border-radius: 20px; }
+        .score-bar .wrong { background: #f44336; padding: 5px 12px; border-radius: 20px; }
+        .next-btn {
+            display: block; width: calc(100% - 40px); margin: 20px; padding: 15px;
+            background: #ffcc00; color: #000; text-align: center; border-radius: 5px;
+            font-size: 16px; text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>પરીક્ષા</h1>
+        <div>
+            <span id="questionNo">1/15</span> 
+            <span class="timer" id="timer">45 s</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="question-box">
+            <h2 id="question">પ્રશ્ન અહીં આવશે</h2>
+            <div class="options" id="options"></div>
+        </div>
+    </div>
+
+    <div class="score-bar">
+        <div class="correct">✔ <span id="correctCount">0</span></div>
+        <div class="wrong">✖ <span id="wrongCount">0</span></div>
+        <a href="#" class="next-btn" onclick="nextQuestion()">આગળનો પ્રશ્ન</a>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "3 સીટવાળીમાં 5 થી 12 વર્ષના કેટલા વિદ્યાર્થીઓને બેસાડી શકાય ?", options: ["8", "7", "6"], answer: 1 },
+            { q: "ટ્રાફિક લાઇટમાં લીલું રંગ શું દર્શાવે છે?", options: ["થંભો", "ચાલો", "સાવચેત"], answer: 1 },
+            { q: "રસ્તા પર કઈ બાજુ ચાલવું?", options: ["જમણી", "ડાબી", "મધ્યમાં"], answer: 1 }
+        ];
+
+        let current = 0, correct = 0, wrong = 0, timer = 45, interval;
+
+        function loadQuestion() {
+            clearInterval(interval);
+            timer = 45;
+            document.getElementById("timer").innerText = timer + " s";
+            interval = setInterval(() => {
+                timer--;
+                document.getElementById("timer").innerText = timer + " s";
+                if (timer === 0) {
+                    clearInterval(interval);
+                    nextQuestion();
+                }
+            }, 1000);
+
+            document.getElementById("questionNo").innerText = (current + 1) + "/" + questions.length;
+            document.getElementById("question").innerText = questions[current].q;
+            const opts = questions[current].options;
+            let optHTML = "";
+            for (let i = 0; i < opts.length; i++) {
+                optHTML += `<div class="option-btn" onclick="checkAnswer(${i})">
+                                <span>${i + 1}</span> ${opts[i]}
+                            </div>`;
+            }
+            document.getElementById("options").innerHTML = optHTML;
+        }
+
+        function checkAnswer(selected) {
+            if (selected === questions[current].answer) {
+                correct++;
+                document.getElementById("correctCount").innerText = correct;
+            } else {
+                wrong++;
+                document.getElementById("wrongCount").innerText = wrong;
+            }
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            current++;
+            if (current < questions.length) {
+                loadQuestion();
+            } else {
+                alert("પરીક્ષા પૂરી થઈ गई.\nસાચા: " + correct + "\nખોટા: " + wrong);
+                location.reload();
+            }
+        }
+
+        loadQuestion();
+    </script>
+
+</body>
+</html>
