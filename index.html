@@ -85,15 +85,15 @@
 
 <div class="header">
   <div class="header-left">
-    <img src="logo.png" alt="Logo" class="logo-img">
+    <img src="images/logo.png" alt="Logo" class="logo-img">
     <h1 id="mainHeading">Gujarat (ગુજરાતી)</h1>
   </div>
   <div class="lang-selector">
-    🌐 <a href="index.html?lang=gu">ગુજરાતી</a> | <a href="index.html?lang=en">English</a>
+    🌐 <a href="#" onclick="changeLang('gu')">ગુજરાતી</a> | <a href="#" onclick="changeLang('en')">English</a>
   </div>
 </div>
 
-<a href="question-bank.html" class="card">
+<a href="#" id="qbankLink" class="card">
   <div class="icon-circle book">📖</div>
   <div class="card-content">
     <div class="card-title" id="qbank">પ્રશ્ન બેંક</div>
@@ -101,7 +101,7 @@
   </div>
 </a>
 
-<a href="practice.html" class="card">
+<a href="#" id="practiceLink" class="card">
   <div class="icon-circle practice">✏️</div>
   <div class="card-content">
     <div class="card-title" id="practice">અભ્યાસ</div>
@@ -109,7 +109,7 @@
   </div>
 </a>
 
-<a href="exam.html" class="card">
+<a href="#" id="examLink" class="card">
   <div class="icon-circle exam">⏰</div>
   <div class="card-content">
     <div class="card-title" id="exam">પરીક્ષા</div>
@@ -117,7 +117,7 @@
   </div>
 </a>
 
-<a href="driving-schools.html" class="card">
+<a href="#" id="schoolLink" class="card">
   <div class="icon-circle car">🚗</div>
   <div class="card-content">
     <div class="card-title" id="school">ડ્રાઇવિંગ સ્કૂલ</div>
@@ -125,7 +125,7 @@
   </div>
 </a>
 
-<a href="settings.html" class="card">
+<a href="#" id="settingsLink" class="card">
   <div class="icon-circle setting">⚙️</div>
   <div class="card-content">
     <div class="card-title" id="settings">સેટિંગ્સ અને મદદ</div>
@@ -178,6 +178,17 @@
   document.getElementById("schoolSub").textContent = text.schoolSub;
   document.getElementById("settings").textContent = text.settings;
   document.getElementById("settingsSub").textContent = text.settingsSub;
+
+  // Links set with lang parameter
+  document.getElementById("qbankLink").href = `question-bank.html?lang=${lang}`;
+  document.getElementById("practiceLink").href = `practice.html?lang=${lang}`;
+  document.getElementById("examLink").href = `exam.html?lang=${lang}`;
+  document.getElementById("schoolLink").href = `driving-schools.html?lang=${lang}`;
+  document.getElementById("settingsLink").href = `settings.html?lang=${lang}`;
+
+  function changeLang(selectedLang) {
+    window.location.href = `index.html?lang=${selectedLang}`;
+  }
 </script>
 
 </body>
