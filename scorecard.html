@@ -14,19 +14,24 @@
     header h1 {
       margin: 0;
       font-size: 22px;
-      background: pink;
-      color: #000;
-      padding: 8px;
-      border-radius: 6px;
-      display: inline-block;
+      color: #fff;
     }
     .score-strip {
-      background: pink;
-      color: #000;
-      text-align: center;
       padding: 10px;
+      text-align: center;
       font-weight: bold;
       font-size: 16px;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+    .score-strip span {
+      display: inline-block;
+      animation: marquee 8s linear infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
     }
     .container { padding: 20px; }
     .question-card {
@@ -34,14 +39,12 @@
       padding: 15px;
       border-radius: 6px;
       margin-bottom: 20px;
-      border-left: 5px solid #4caf50;
-    }
-    .question-card.wrong {
-      border-left: 5px solid #f44336;
+      border-left: 5px solid #555;
     }
     .question-card h3 {
       margin: 0 0 10px;
       font-size: 17px;
+      color: #fff;
     }
     .answer {
       margin: 5px 0;
@@ -77,29 +80,37 @@
   <h1 id="title">સ્કોર કાર્ડ</h1>
 </header>
 
-<div class="score-strip" id="scoreText">You scored 0 out of 0</div>
+<div class="score-strip" id="scoreText">
+  <span>લોડ થઇ રહ્યું છે...</span>
+</div>
 
 <div class="container" id="resultArea">
   <!-- Results will load here -->
 </div>
 
 <div class="btn-group">
-  <a href="result.html" class="btn" id="backBtn">⬅️ Back</a>
-  <a href="exam.html" class="btn" id="retakeBtn">🔄 Retake</a>
-  <a href="index.html" class="btn" id="homeBtn">🏠 Home</a>
+  <a href="result.html" class="btn">⬅️ Back</a>
+  <a href="exam.html" class="btn">🔄 Retake</a>
+  <a href="index.html" class="btn">🏠 Home</a>
 </div>
 
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const lang = urlParams.get('lang') || 'gu';
-  const correctCount = urlParams.get('correct') || 0;
-  const total = urlParams.get('total') || 0;
-
-  document.getElementById("scoreText").textContent = (lang === 'en')
-    ? `You Scored ${correctCount} Out Of ${total}`
-    : `તમે કુલ ${total} માંથી ${correctCount} સ્કોર કર્યા`;
+  const correctCount = parseInt(urlParams.get('correct')) || 0;
+  const total = parseInt(urlParams.get('total')) || 0;
 
   document.getElementById("title").textContent = (lang === 'en') ? "SCORE CARD" : "સ્કોર કાર્ડ";
+
+  const passMark = Math.ceil(total * 0.5);  // 50% passing mark
+  const isPass = correctCount >= passMark;
+
+  // Set score text with scrolling marquee and background color
+  const scoreStrip = document.getElementById("scoreText");
+  scoreStrip.style.background = isPass ? "#4caf50" : "#f44336";
+  scoreStrip.innerHTML = `<span>${(lang === 'en')
+    ? `You Scored ${correctCount} Out Of ${total}`
+    : `તમે કુલ ${total} માંથી ${correctCount} સ્કોર કર્યા`}</span>`;
 
   const results = JSON.parse(localStorage.getItem('quizResult')) || [];
   const resultArea = document.getElementById("resultArea");
@@ -107,7 +118,6 @@
   results.forEach((item, index) => {
     const card = document.createElement("div");
     card.classList.add("question-card");
-    if (!item.isCorrect) card.classList.add("wrong");
 
     const qNo = document.createElement("h3");
     qNo.textContent = `${index + 1}. ${item.question}`;
@@ -121,16 +131,13 @@
     } else {
       yourAns.innerHTML = `❌ ${item.selected}`;
       yourAns.classList.add("wrong");
-    }
-    card.appendChild(yourAns);
 
-    if (!item.isCorrect) {
       const correctAns = document.createElement("div");
       correctAns.className = "answer correct";
       correctAns.innerHTML = `✅ ${item.correct}`;
       card.appendChild(correctAns);
     }
-
+    card.appendChild(yourAns);
     resultArea.appendChild(card);
   });
 </script>
