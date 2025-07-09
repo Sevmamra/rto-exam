@@ -7,7 +7,7 @@
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #fff; }
     header { background: #222; padding: 15px; display: flex; align-items: center; justify-content: space-between; }
-    header a { color: #fff; text-decoration: none; font-size: 22px; }
+    header a { color: #fff; text-decoration: none; font-size: 22px; cursor: pointer; }
     header h1 { font-size: 18px; margin: 0; }
     header .right { display: flex; align-items: center; font-size: 16px; }
     .container { padding: 20px; }
@@ -28,6 +28,7 @@
       align-items: center;
       font-size: 16px;
       border: 1px solid #333;
+      transition: background 0.3s, color 0.3s;
     }
     .option:hover { background: #333; }
     .option span {
@@ -41,10 +42,13 @@
       line-height: 30px;
       margin-right: 12px;
     }
+    .selected {
+      background: #fff !important;
+      color: #000;
+    }
     .scorebar {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      justify-content: flex-end;
       padding: 10px 0;
     }
     .btn-next {
@@ -56,29 +60,16 @@
       text-decoration: none;
       font-size: 16px;
       font-weight: bold;
+      cursor: pointer;
     }
     .btn-next:hover { background: #ffd633; }
-    .score-green {
-      background: #4caf50;
-      color: #000;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-    }
-    .score-red {
-      background: #f44336;
-      color: #000;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-    }
   </style>
 </head>
 <body>
 
 <header>
-  <a href="exam.html">←</a>
-  <h1>પરીક્ષા</h1>
+  <a id="backBtn">←</a>
+  <h1 id="quizTitle">પરીક્ષા</h1>
   <div class="right">
     <span id="questionNo">1/15</span>&nbsp;&nbsp;
     <span id="timer">45s</span>
@@ -94,31 +85,42 @@
   </div>
 
   <div class="scorebar">
-    <div>
-      <span class="score-green" id="correctScore">✔️ 0</span>
-      <span class="score-red" id="wrongScore">❌ 0</span>
-    </div>
-    <a href="#" class="btn-next" onclick="nextQuestion()">આગળનો પ્રશ્ન →</a>
+    <a class="btn-next" onclick="nextQuestion()">આગળનો પ્રશ્ન →</a>
   </div>
 </div>
 
 <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const total = parseInt(urlParams.get('total')) || 15;
+  const lang = urlParams.get('lang') || 'gu';
+
   let allQuestions = [];
   let selectedQuestions = [];
   let currentQuestionIndex = 0;
   let timer = 45;
-  let correct = 0;
-  let wrong = 0;
   let countdown;
   let optionMap = {};
+  let userAnswers = [];
+
+  document.getElementById("questionNo").textContent = `1/${total}`;
+
+  if (lang === 'en') {
+    document.getElementById("quizTitle").textContent = "Exam";
+    document.querySelector(".btn-next").textContent = "Next Question →";
+  }
+
+  document.getElementById("backBtn").addEventListener("click", () => {
+    if (confirm(lang === 'en' ? "Are you sure you want to quit the exam?" : "શું તમે પરીક્ષા છોડવા માંગો છો?")) {
+      window.location.href = `exam.html?lang=${lang}`;
+    }
+  });
 
   function startQuiz() {
     fetch('questions.json')
       .then(res => res.json())
       .then(data => {
         allQuestions = data.questions;
-        selectedQuestions = shuffleArray(allQuestions).slice(0, 15);
-        document.getElementById("questionNo").textContent = `1/${selectedQuestions.length}`;
+        selectedQuestions = shuffleArray(allQuestions).slice(0, total);
         showQuestion();
         startTimer();
       });
@@ -139,39 +141,58 @@
 
   function showQuestion() {
     let q = selectedQuestions[currentQuestionIndex];
-    document.getElementById("questionText").textContent = `પ્ર. ${currentQuestionIndex + 1}: ${q.question}`;
+    let qText = lang === 'en' ? q.question_en : q.question;
+    document.getElementById("questionText").textContent = `Q.${currentQuestionIndex + 1}: ${qText}`;
 
-    // Shuffle options for this question
     let shuffledOptions = shuffleArray(q.options.slice());
-    optionMap = {
-      'A': shuffledOptions[0],
-      'B': shuffledOptions[1],
-      'C': shuffledOptions[2]
-    };
+    optionMap = { 'A': shuffledOptions[0], 'B': shuffledOptions[1], 'C': shuffledOptions[2] };
 
     document.getElementById("optionA").innerHTML = `<span>A</span> ${optionMap['A']}`;
     document.getElementById("optionB").innerHTML = `<span>B</span> ${optionMap['B']}`;
     document.getElementById("optionC").innerHTML = `<span>C</span> ${optionMap['C']}`;
+
+    removeSelections();
   }
 
   function selectOption(choice) {
     clearInterval(countdown);
-    let q = selectedQuestions[currentQuestionIndex];
-    let selectedText = optionMap[choice];
-    let correctAnswerText = q.options[q.answer - 1];
-    if (selectedText === correctAnswerText) {
-      correct++;
-      document.getElementById("correctScore").textContent = `✔️ ${correct}`;
-    } else {
-      wrong++;
-      document.getElementById("wrongScore").textContent = `❌ ${wrong}`;
-    }
+    removeSelections();
+    document.getElementById(`option${choice}`).classList.add("selected");
+    userAnswers[currentQuestionIndex] = optionMap[choice];
+  }
+
+  function removeSelections() {
+    document.getElementById("optionA").classList.remove("selected");
+    document.getElementById("optionB").classList.remove("selected");
+    document.getElementById("optionC").classList.remove("selected");
   }
 
   function nextQuestion() {
     clearInterval(countdown);
     currentQuestionIndex++;
     if (currentQuestionIndex >= selectedQuestions.length) {
+      // Future: store userAnswers
+      window.location.href = `result.html?total=${total}&lang=${lang}`;
+    } else {
+      document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${total}`;
+      showQuestion();
+      startTimer();
+    }
+  }
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  startQuiz();
+</script>
+
+</body>
+</html>
       window.location.href = `result.html?correct=${correct}&total=${selectedQuestions.length}`;
     } else {
       document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${selectedQuestions.length}`;
