@@ -83,13 +83,14 @@
 
   <div class="scorebar">
     <div id="progress"></div>
-    <a href="#" class="btn-next" onclick="nextQuestion()">આગળ નો પ્રશ્ન →</a>
+    <a href="#" class="btn-next" onclick="nextQuestion()">આગળ →</a>
   </div>
 </div>
 
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const lang = urlParams.get('lang') || 'gu';
+  const questionCount = parseInt(urlParams.get('count')) || 15;
 
   let allQuestions = [];
   let selectedQuestions = [];
@@ -100,19 +101,18 @@
   let correct = 0;
   let resultHistory = [];
 
-  const questionCount =  parseInt(urlParams.get('count')) || 15;
-
-  document.getElementById("questionNo").textContent = `1/${questionCount}`;
   document.getElementById("headerTitle").textContent = lang === 'en' ? "Exam" : "પરીક્ષા";
+  document.getElementById("questionNo").textContent = `1/${questionCount}`;
 
   function confirmExit() {
     if (confirm(lang === 'en' ? "Are you sure you want to quit the exam?" : "શું તમે પરીક્ષા છોડવી છે?")) {
-      window.location.href = `index.html`;
+      window.location.href = "index.html";
     }
   }
 
   function startQuiz() {
-    fetch(lang === 'en' ? 'questions-en.json' : 'questions-gu.json')
+    const file = lang === 'en' ? 'questions-en.json' : 'questions-gu.json';
+    fetch(file)
       .then(res => res.json())
       .then(data => {
         allQuestions = data.questions;
@@ -143,7 +143,6 @@
     document.getElementById("optionA").innerHTML = `<span>A</span> ${optionMap['A']}`;
     document.getElementById("optionB").innerHTML = `<span>B</span> ${optionMap['B']}`;
     document.getElementById("optionC").innerHTML = `<span>C</span> ${optionMap['C']}`;
-
     document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${questionCount}`;
   }
 
