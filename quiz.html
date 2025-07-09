@@ -28,8 +28,8 @@
       align-items: center;
       font-size: 16px;
       border: 1px solid #333;
-      transition: 0.3s;
     }
+    .option:hover { background: #333; }
     .option span {
       display: inline-block;
       width: 30px;
@@ -41,14 +41,6 @@
       line-height: 30px;
       margin-right: 12px;
     }
-    .option:hover { background: #333; }
-    .option.selected { background: #fff; color: #000; }
-    .scorebar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-    }
     .btn-next {
       display: inline-block;
       padding: 12px 20px;
@@ -59,16 +51,15 @@
       font-size: 16px;
       font-weight: bold;
     }
-    .btn-next:hover { background: #ffd633; }
   </style>
 </head>
 <body>
 
 <header>
-  <a href="#" onclick="confirmExit()">←</a>
-  <h1 id="headerTitle">પરીક્ષા</h1>
+  <a href="#" onclick="confirmQuit()">←</a>
+  <h1>પરીક્ષા</h1>
   <div class="right">
-    <span id="questionNo">1/15</span>&nbsp;&nbsp;
+    <span id="questionNo">1/0</span>&nbsp;&nbsp;
     <span id="timer">45s</span>
   </div>
 </header>
@@ -81,16 +72,14 @@
     <div class="option" id="optionC" onclick="selectOption('C')"><span>C</span></div>
   </div>
 
-  <div class="scorebar">
-    <div id="progress"></div>
-    <a href="#" class="btn-next" onclick="nextQuestion()">આગળ →</a>
-  </div>
+  <a href="#" class="btn-next" onclick="nextQuestion()">આગળનો પ્રશ્ન →</a>
 </div>
 
 <script>
-  const urlParams = new URLSearchParams(window.location.search);
-  const lang = urlParams.get('lang') || 'gu';
-  const questionCount = parseInt(urlParams.get('count')) || 15;
+  const params = new URLSearchParams(window.location.search);
+  const totalQuestions = parseInt(params.get("total")) || 15;
+  const lang = params.get("lang") || 'gu';
+  const jsonFile = (lang === 'en') ? 'questions-en.json' : 'questions-gu.json';
 
   let allQuestions = [];
   let selectedQuestions = [];
@@ -98,29 +87,19 @@
   let timer = 45;
   let countdown;
   let optionMap = {};
-  let correct = 0;
-  let resultHistory = [];
 
-  document.getElementById("headerTitle").textContent = lang === 'en' ? "Exam" : "પરીક્ષા";
-  document.getElementById("questionNo").textContent = `1/${questionCount}`;
+  fetch(jsonFile)
+    .then(res => res.json())
+    .then(data => {
+      allQuestions = data.questions;
+      const maxAvailable = allQuestions.length;
+      const questionsToPick = Math.min(totalQuestions, maxAvailable);
+      selectedQuestions = shuffleArray(allQuestions).slice(0, questionsToPick);
 
-  function confirmExit() {
-    if (confirm(lang === 'en' ? "Are you sure you want to quit the exam?" : "શું તમે પરીક્ષા છોડવી છે?")) {
-      window.location.href = "index.html";
-    }
-  }
-
-  function startQuiz() {
-    const file = lang === 'en' ? 'questions-en.json' : 'questions-gu.json';
-    fetch(file)
-      .then(res => res.json())
-      .then(data => {
-        allQuestions = data.questions;
-        selectedQuestions = shuffleArray(allQuestions).slice(0, questionCount);
-        showQuestion();
-        startTimer();
-      });
-  }
+      document.getElementById("questionNo").textContent = `1/${selectedQuestions.length}`;
+      showQuestion();
+      startTimer();
+    });
 
   function startTimer() {
     clearInterval(countdown);
@@ -134,64 +113,50 @@
   }
 
   function showQuestion() {
-    clearOptions();
-    let q = selectedQuestions[currentQuestionIndex];
-    document.getElementById("questionText").textContent = `${currentQuestionIndex + 1}. ${q.question}`;
-    let shuffledOptions = shuffleArray(q.options.slice());
-    optionMap = { 'A': shuffledOptions[0], 'B': shuffledOptions[1], 'C': shuffledOptions[2] };
+    const q = selectedQuestions[currentQuestionIndex];
+    document.getElementById("questionText").textContent = `પ્ર. ${currentQuestionIndex + 1}: ${q.question}`;
 
-    document.getElementById("optionA").innerHTML = `<span>A</span> ${optionMap['A']}`;
-    document.getElementById("optionB").innerHTML = `<span>B</span> ${optionMap['B']}`;
-    document.getElementById("optionC").innerHTML = `<span>C</span> ${optionMap['C']}`;
-    document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${questionCount}`;
-  }
+    const shuffledOptions = shuffleArray(q.options.slice());
+    optionMap = {
+      'A': shuffledOptions[0],
+      'B': shuffledOptions[1],
+      'C': shuffledOptions[2]
+    };
 
-  function clearOptions() {
-    ['A', 'B', 'C'].forEach(opt => {
-      document.getElementById("option" + opt).classList.remove('selected');
-    });
+    document.getElementById("optionA").innerHTML = `<span>A</span> ${optionMap.A}`;
+    document.getElementById("optionB").innerHTML = `<span>B</span> ${optionMap.B}`;
+    document.getElementById("optionC").innerHTML = `<span>C</span> ${optionMap.C}`;
   }
 
   function selectOption(choice) {
     clearInterval(countdown);
-    clearOptions();
-    document.getElementById("option" + choice).classList.add('selected');
-
-    let q = selectedQuestions[currentQuestionIndex];
-    let selectedText = optionMap[choice];
-    let correctAnswerText = q.options[q.answer - 1];
-
-    if (selectedText === correctAnswerText) correct++;
-
-    resultHistory.push({
-      question: q.question,
-      selected: selectedText,
-      correct: correctAnswerText,
-      isCorrect: selectedText === correctAnswerText
-    });
+    nextQuestion();
   }
 
   function nextQuestion() {
     clearInterval(countdown);
     currentQuestionIndex++;
     if (currentQuestionIndex >= selectedQuestions.length) {
-      localStorage.setItem('quizResult', JSON.stringify(resultHistory));
-      window.location.href = `result.html?correct=${correct}&total=${questionCount}&lang=${lang}`;
+      window.location.href = `result.html?lang=${lang}`;
     } else {
+      document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${selectedQuestions.length}`;
       showQuestion();
       startTimer();
     }
   }
 
-  function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
-    return arr;
+    return array;
   }
 
-  startQuiz();
+  function confirmQuit() {
+    const msg = (lang === 'en') ? "Do you really want to quit the exam?" : "શું તમે પરીક્ષા છોડવા માંગો છો?";
+    if (confirm(msg)) window.location.href = `index.html?lang=${lang}`;
+  }
 </script>
 
 </body>
