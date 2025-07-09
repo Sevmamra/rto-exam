@@ -46,6 +46,9 @@
   let passMark = Math.ceil(total * 0.66);
   const isPass = correct >= passMark;
 
+  // Background color set as per result
+  document.body.style.backgroundColor = isPass ? "#0c3" : "#b00020";
+
   if (lang === 'en') {
     document.title = "Exam Result";
     document.getElementById("resultTitle").textContent = isPass ? "Congratulations! You Passed!" : "Sorry, You Failed.";
@@ -61,10 +64,17 @@
     document.getElementById("homeBtn").textContent = "હોમ પેજ";
   }
 
+  // Image as per result
   document.getElementById("resultImg").src = isPass ? "pass.png" : "fail.png";
 
+  // Button Links
   document.getElementById("retryBtn").href = `exam.html?lang=${lang}`;
   document.getElementById("scoreCardBtn").href = `scorecard.html?lang=${lang}`;
+
+  // Save to localStorage for scorecard use
+  localStorage.setItem("passMark", passMark);
+  localStorage.setItem("resultTotal", total);
+  localStorage.setItem("resultCorrect", correct);
 </script>
 
 </body>
