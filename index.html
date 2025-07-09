@@ -1,86 +1,96 @@
 <!DOCTYPE html>
 <html lang="gu">
 <head>
-    <meta charset="UTF-8">
-    <title>RTO Quiz App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #fff; }
-        header { background: #222; padding: 15px; display: flex; align-items: center; }
-        header img { width: 30px; height: 30px; margin-right: 10px; }
-        header h1 { font-size: 18px; margin: 0; }
-        .container { padding: 20px; }
-        .card {
-            display: flex; align-items: center;
-            background: #1e1e1e; border-radius: 8px;
-            padding: 15px; margin-bottom: 15px;
-            text-decoration: none; color: #fff;
-        }
-        .card-icon {
-            width: 50px; height: 50px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 22px; margin-right: 15px;
-        }
-        .title { font-size: 18px; margin: 0 0 5px; }
-        .desc { font-size: 14px; color: #ccc; margin: 0; }
-        .blue { background: #3f51b5; }
-        .cyan { background: #00bcd4; }
-        .red { background: #f44336; }
-        .teal { background: #009688; }
-        .pink { background: #e91e63; }
-    </style>
+  <meta charset="UTF-8">
+  <title>ડ્રાઇવિંગ લાયસન્સ પરીક્ષા</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      text-align: center;
+    }
+    .header {
+      padding: 20px;
+      font-size: 22px;
+    }
+    .lang-selector {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 14px;
+    }
+    .lang-selector a {
+      color: #ffcc00;
+      text-decoration: none;
+      margin: 0 4px;
+    }
+    .btn-start {
+      display: inline-block;
+      padding: 16px 28px;
+      background: #ffcc00;
+      color: #000;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 80px;
+    }
+    .btn-start:hover {
+      background: #ffd633;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <img src="logo.png" alt="Logo">
-    <h1>Gujarat (ગુજરાતી)</h1>
-</header>
-
-<div class="container">
-
-    <a href="#" class="card">
-        <div class="card-icon blue">📖</div>
-        <div>
-            <p class="title">પ્રશ્ન બેંક</p>
-            <p class="desc">પ્રશ્નો યાદી અને અર્થ</p>
-        </div>
-    </a>
-
-    <a href="#" class="card">
-        <div class="card-icon cyan">📝</div>
-        <div>
-            <p class="title">અભ્યાસ</p>
-            <p class="desc">સમય વિના ક્વિઝ</p>
-        </div>
-    </a>
-
-    <!-- પરીક્ષા page ka link yahaan -->
-    <a href="exam.html" class="card">
-        <div class="card-icon red">🕒</div>
-        <div>
-            <p class="title">પરીક્ષા</p>
-            <p class="desc">સમયમર્યાદિત પરીક્ષા આપો</p>
-        </div>
-    </a>
-
-    <a href="#" class="card">
-        <div class="card-icon teal">🚘</div>
-        <div>
-            <p class="title">ડ્રાઇવિંગ સ્કૂલ</p>
-            <p class="desc">શોધો અને સંપર્ક કરો</p>
-        </div>
-    </a>
-
-    <a href="#" class="card">
-        <div class="card-icon pink">⚙️</div>
-        <div>
-            <p class="title">સેટિંગ્સ અને મદદ</p>
-            <p class="desc">ભાષા, ફોર્મ્સ અને માહિતી</p>
-        </div>
-    </a>
-
+<!-- Language Selector -->
+<div class="lang-selector">
+  🌐 
+  <a href="index.html?lang=gu">Gujarati</a> | 
+  <a href="index.html?lang=en">English</a>
 </div>
+
+<!-- Page Title -->
+<div class="header" id="mainHeading">
+  ડ્રાઇવિંગ લાયસન્સ પરીક્ષા
+</div>
+
+<!-- Start Button -->
+<a href="#" class="btn-start" id="startBtn">પરીક્ષા શરૂ કરો</a>
+
+<script>
+  // Detect URL parameter for language
+  const urlParams = new URLSearchParams(window.location.search);
+  const lang = urlParams.get('lang') || 'gu';
+
+  // Gujarati Texts
+  const texts_gu = {
+    title: "ડ્રાઇવિંગ લાયસન્સ પરીક્ષા",
+    start: "પરીક્ષા શરૂ કરો"
+  };
+
+  // English Texts
+  const texts_en = {
+    title: "Driving License Test",
+    start: "Start Exam"
+  };
+
+  // Apply text based on selected language
+  if (lang === 'en') {
+    document.getElementById("mainHeading").textContent = texts_en.title;
+    document.getElementById("startBtn").textContent = texts_en.start;
+    document.title = texts_en.title;
+  } else {
+    document.getElementById("mainHeading").textContent = texts_gu.title;
+    document.getElementById("startBtn").textContent = texts_gu.start;
+    document.title = texts_gu.title;
+  }
+
+  // Set start button link with lang param
+  document.getElementById("startBtn").href = `exam.html?lang=${lang}`;
+</script>
 
 </body>
 </html>
