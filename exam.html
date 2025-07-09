@@ -34,6 +34,29 @@
       font-size: 15px;
     }
 
+    .marks-input {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .marks-input label {
+      font-size: 16px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .marks-input input {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 200px;
+      border: none;
+      border-radius: 4px;
+    }
+
     .start-btn {
       display: block;
       width: 100%;
@@ -47,30 +70,82 @@
       font-weight: bold;
       margin-top: 20px;
     }
-
   </style>
 </head>
 <body>
 
 <header>
-  <a href="index.html">←</a>
-  <h1>પરીક્ષા</h1>
+  <a href="#" id="backBtn">←</a>
+  <h1 id="pageTitle">પરીક્ષા</h1>
 </header>
 
 <div class="container">
 
   <div class="box">
-    <h2>સૂચના</h2>
+    <h2 id="instructionTitle">સૂચના</h2>
     <ul>
-      <li>ટ્રાફિક નિયમો, નિશાન અને ટ્રાફિક ચિહ્નો જેવા વિષયો આવરી લેવામાં આવશે.</li>
-      <li>પરીક્ષામાં યાદ્રચ્છિક રીતે 15 પ્રશ્નો પુછાશે, જેમાંથી 11 સચોટ જવાબ આપવો જરૂરી છે.</li>
-      <li>દરેક પ્રશ્ન માટે 45 સેકન્ડ મળશે.</li>
+      <li id="rule1">ટ્રાફિક નિયમો, નિશાન અને ટ્રાફિક ચિહ્નો જેવા વિષયો આવરી લેવામાં આવશે.</li>
+      <li id="rule2">પરીક્ષામાં યાદ્રચ્છિક રીતે પસંદ કરાયેલા પ્રશ્નો પુછાશે.</li>
+      <li id="rule3">દરેક પ્રશ્ન માટે 45 સેકન્ડ મળશે.</li>
     </ul>
   </div>
 
-  <a href="quiz.html" class="start-btn">પરીક્ષા શરૂ કરો</a>
+  <div class="marks-input">
+    <label for="marks" id="marksLabel">કેટલા માર્ક્સની પરીક્ષા આપવી છે ?</label>
+    <input type="number" id="marks" placeholder="ઉદાહરણ: 15" min="1" max="500">
+  </div>
+
+  <a href="#" onclick="startExam()" id="startBtn" class="start-btn">પરીક્ષા શરૂ કરો</a>
 
 </div>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const lang = urlParams.get('lang') || 'gu';
+
+  const gujarati = {
+    title: "પરીક્ષા",
+    instructions: "સૂચના",
+    rule1: "ટ્રાફિક નિયમો, નિશાન અને ટ્રાફિક ચિહ્નો જેવા વિષયો આવરી લેવામાં આવશે.",
+    rule2: "પરીક્ષામાં યાદ્રચ્છિક રીતે પસંદ કરાયેલા પ્રશ્નો પુછાશે.",
+    rule3: "દરેક પ્રશ્ન માટે 45 સેકન્ડ મળશે.",
+    marksLabel: "કેટલા માર્ક્સની પરીક્ષા આપવી છે ?",
+    startBtn: "પરીક્ષા શરૂ કરો",
+    backLink: "index.html?lang=gu"
+  };
+
+  const english = {
+    title: "Exam",
+    instructions: "Instructions",
+    rule1: "Topics like traffic rules, signs and symbols will be covered.",
+    rule2: "The exam will contain randomly selected questions.",
+    rule3: "You will have 45 seconds for each question.",
+    marksLabel: "How many marks exam you want to give?",
+    startBtn: "Start Test",
+    backLink: "index.html?lang=en"
+  };
+
+  const text = (lang === 'en') ? english : gujarati;
+
+  // Text replacement
+  document.getElementById("pageTitle").textContent = text.title;
+  document.getElementById("instructionTitle").textContent = text.instructions;
+  document.getElementById("rule1").textContent = text.rule1;
+  document.getElementById("rule2").textContent = text.rule2;
+  document.getElementById("rule3").textContent = text.rule3;
+  document.getElementById("marksLabel").textContent = text.marksLabel;
+  document.getElementById("startBtn").textContent = text.startBtn;
+  document.getElementById("backBtn").setAttribute("href", text.backLink);
+
+  function startExam() {
+    const marks = document.getElementById("marks").value;
+    if (marks < 1) {
+      alert((lang === 'en') ? "Please enter a valid number." : "મહેરબાની કરીને સાચી સંખ્યા દાખલ કરો.");
+      return;
+    }
+    window.location.href = `quiz.html?total=${marks}&lang=${lang}`;
+  }
+</script>
 
 </body>
 </html>
