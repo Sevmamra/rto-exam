@@ -171,7 +171,7 @@
     clearInterval(countdown);
     currentQuestionIndex++;
     if (currentQuestionIndex >= selectedQuestions.length) {
-      window.location.href = `result.html?total=${total}&lang=${lang}`;
+      window.location.href = `result.html?correct=${correct}&total=${selectedQuestions.length}&lang=${lang}`;
     } else {
       document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${total}`;
       showQuestion();
