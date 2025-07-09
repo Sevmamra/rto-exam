@@ -2,24 +2,27 @@
 <html lang="gu">
 <head>
   <meta charset="UTF-8">
-  <title>ડ્રાઇવિંગ લાયસન્સ પરીક્ષા</title>
+  <title>RTO Exam</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
+      background-color: #121212;
       color: #fff;
-      text-align: center;
+      font-family: Arial, sans-serif;
     }
     .header {
-      padding: 20px;
-      font-size: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1e1e1e;
+      padding: 12px 20px;
+    }
+    .header h1 {
+      font-size: 20px;
+      margin: 0;
     }
     .lang-selector {
-      position: absolute;
-      top: 14px;
-      right: 14px;
       font-size: 14px;
     }
     .lang-selector a {
@@ -27,69 +30,131 @@
       text-decoration: none;
       margin: 0 4px;
     }
-    .btn-start {
-      display: inline-block;
-      padding: 16px 28px;
-      background: #ffcc00;
-      color: #000;
-      border-radius: 30px;
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 80px;
+    .card {
+      background: #1f1f1f;
+      border-radius: 8px;
+      margin: 14px 14px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
     }
-    .btn-start:hover {
-      background: #ffd633;
+    .card img {
+      width: 36px;
+      height: 36px;
+      margin-right: 14px;
+    }
+    .card-content {
+      flex: 1;
+    }
+    .card-title {
+      font-size: 18px;
+      margin: 0;
+    }
+    .card-sub {
+      font-size: 14px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    a.card {
+      text-decoration: none;
+      color: inherit;
     }
   </style>
 </head>
 <body>
 
-<!-- Language Selector -->
-<div class="lang-selector">
-  🌐 
-  <a href="index.html?lang=gu">Gujarati</a> | 
-  <a href="index.html?lang=en">English</a>
+<div class="header">
+  <h1 id="mainHeading">Gujarat (ગુજરાતી)</h1>
+  <div class="lang-selector">
+    🌐 <a href="index.html?lang=gu">ગુજરાતી</a> | <a href="index.html?lang=en">English</a>
+  </div>
 </div>
 
-<!-- Page Title -->
-<div class="header" id="mainHeading">
-  ડ્રાઇવિંગ લાયસન્સ પરીક્ષા
-</div>
+<a href="question-bank.html" class="card">
+  <img src="icons/book.png" alt="Icon">
+  <div class="card-content">
+    <div class="card-title" id="qbank">પ્રશ્ન બેંક</div>
+    <div class="card-sub" id="qbankSub">પ્રશ્નો યાદી અને અર્થ</div>
+  </div>
+</a>
 
-<!-- Start Button -->
-<a href="#" class="btn-start" id="startBtn">પરીક્ષા શરૂ કરો</a>
+<a href="practice.html" class="card">
+  <img src="icons/practice.png" alt="Icon">
+  <div class="card-content">
+    <div class="card-title" id="practice">અભ્યાસ</div>
+    <div class="card-sub" id="practiceSub">સમય વિના ક્લિક</div>
+  </div>
+</a>
+
+<a href="exam.html" class="card">
+  <img src="icons/exam.png" alt="Icon">
+  <div class="card-content">
+    <div class="card-title" id="exam">પરીક્ષા</div>
+    <div class="card-sub" id="examSub">સમયમર્યાદિત પરીક્ષા આપો</div>
+  </div>
+</a>
+
+<a href="driving-schools.html" class="card">
+  <img src="icons/car.png" alt="Icon">
+  <div class="card-content">
+    <div class="card-title" id="school">ડ્રાઇવિંગ સ્કૂલ</div>
+    <div class="card-sub" id="schoolSub">શોધો અને સંપર્ક કરો</div>
+  </div>
+</a>
+
+<a href="settings.html" class="card">
+  <img src="icons/setting.png" alt="Icon">
+  <div class="card-content">
+    <div class="card-title" id="settings">સેટિંગ્સ અને મદદ</div>
+    <div class="card-sub" id="settingsSub">ભાષા, ફોર્મ્સ અને માહિતી</div>
+  </div>
+</a>
 
 <script>
-  // Detect URL parameter for language
   const urlParams = new URLSearchParams(window.location.search);
   const lang = urlParams.get('lang') || 'gu';
 
-  // Gujarati Texts
-  const texts_gu = {
-    title: "ડ્રાઇવિંગ લાયસન્સ પરીક્ષા",
-    start: "પરીક્ષા શરૂ કરો"
+  const gujarati = {
+    heading: "Gujarat (ગુજરાતી)",
+    qbank: "પ્રશ્ન બેંક",
+    qbankSub: "પ્રશ્નો યાદી અને અર્થ",
+    practice: "અભ્યાસ",
+    practiceSub: "સમય વિના ક્લિક",
+    exam: "પરીક્ષા",
+    examSub: "સમયમર્યાદિત પરીક્ષા આપો",
+    school: "ડ્રાઇવિંગ સ્કૂલ",
+    schoolSub: "શોધો અને સંપર્ક કરો",
+    settings: "સેટિંગ્સ અને મદદ",
+    settingsSub: "ભાષા, ફોર્મ્સ અને માહિતી"
   };
 
-  // English Texts
-  const texts_en = {
-    title: "Driving License Test",
-    start: "Start Exam"
+  const english = {
+    heading: "Gujarat (English)",
+    qbank: "Question Bank",
+    qbankSub: "List of questions and meanings",
+    practice: "Practice",
+    practiceSub: "Click without time limit",
+    exam: "Exam",
+    examSub: "Give a timed exam",
+    school: "Driving Schools",
+    schoolSub: "Search and Contact",
+    settings: "Settings & Help",
+    settingsSub: "Language, forms, info"
   };
 
-  // Apply text based on selected language
-  if (lang === 'en') {
-    document.getElementById("mainHeading").textContent = texts_en.title;
-    document.getElementById("startBtn").textContent = texts_en.start;
-    document.title = texts_en.title;
-  } else {
-    document.getElementById("mainHeading").textContent = texts_gu.title;
-    document.getElementById("startBtn").textContent = texts_gu.start;
-    document.title = texts_gu.title;
-  }
+  const text = (lang === 'en') ? english : gujarati;
 
-  // Set start button link with lang param
-  document.getElementById("startBtn").href = `exam.html?lang=${lang}`;
+  document.getElementById("mainHeading").textContent = text.heading;
+  document.getElementById("qbank").textContent = text.qbank;
+  document.getElementById("qbankSub").textContent = text.qbankSub;
+  document.getElementById("practice").textContent = text.practice;
+  document.getElementById("practiceSub").textContent = text.practiceSub;
+  document.getElementById("exam").textContent = text.exam;
+  document.getElementById("examSub").textContent = text.examSub;
+  document.getElementById("school").textContent = text.school;
+  document.getElementById("schoolSub").textContent = text.schoolSub;
+  document.getElementById("settings").textContent = text.settings;
+  document.getElementById("settingsSub").textContent = text.settingsSub;
 </script>
 
 </body>
