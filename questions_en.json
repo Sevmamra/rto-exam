@@ -1,44 +1,76 @@
 {
   "questions": [
     {
-      "question": "What should you do at a pedestrian crossing?",
-      "options": ["Stop the vehicle", "Honk", "Give way"],
-      "answer": "Stop the vehicle"
+      "question": "What should you do if a pedestrian is waiting at a crossing?",
+      "options": [
+        "Stop your vehicle and let them pass",
+        "Speed up and go ahead",
+        "Honk and move forward"
+      ],
+      "answer": 1
     },
     {
-      "question": "If another vehicle is coming from the opposite side on a narrow bridge, what should you do?",
-      "options": ["Move ahead", "Go back", "Give way"],
-      "answer": "Give way"
+      "question": "What should you do at an unmanned railway crossing?",
+      "options": [
+        "Cross without looking",
+        "Stop and check carefully",
+        "Honk and quickly cross"
+      ],
+      "answer": 2
     },
     {
-      "question": "In case of an accident with injuries, what is your duty?",
-      "options": ["Inform police", "Ignore", "Hide details"],
-      "answer": "Inform police"
+      "question": "What is the validity of a learner's license?",
+      "options": [
+        "1 Year",
+        "6 Months",
+        "2 Years"
+      ],
+      "answer": 2
     },
     {
-      "question": "What should not be done on a one-way road?",
-      "options": ["Reverse the vehicle", "Honk", "Overtake"],
-      "answer": "Reverse the vehicle"
+      "question": "What to do when an ambulance comes behind you?",
+      "options": [
+        "Stop where you are",
+        "Give way to ambulance",
+        "Speed up and escape"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "When parking a vehicle at night, what is essential?",
+      "options": [
+        "Keep lights off",
+        "Turn on parking lights",
+        "Keep horn on"
+      ],
+      "answer": 2
     },
     {
       "question": "From which side should you overtake?",
-      "options": ["Right side", "Left side", "Without permission"],
-      "answer": "Right side"
+      "options": [
+        "Right side",
+        "Left side",
+        "From behind"
+      ],
+      "answer": 1
     },
     {
-      "question": "While parking a vehicle at night, what should you do?",
-      "options": ["Turn off lights", "Keep parking lights on", "Park on road"],
-      "answer": "Keep parking lights on"
+      "question": "What should you do at a red traffic light?",
+      "options": [
+        "Keep moving",
+        "Stop at the line",
+        "Keep honking"
+      ],
+      "answer": 2
     },
     {
-      "question": "On seeing an ambulance, what should you do?",
-      "options": ["Give way", "Block the way", "Ignore"],
-      "answer": "Give way"
-    },
-    {
-      "question": "At an unmanned railway crossing, what should you do?",
-      "options": ["Cross quickly", "Check and cross", "Honk loudly"],
-      "answer": "Check and cross"
+      "question": "If another vehicle comes from the opposite side on a narrow road, what to do?",
+      "options": [
+        "You go first",
+        "Wait till other passes",
+        "Honk to alert"
+      ],
+      "answer": 2
     }
   ]
 }
