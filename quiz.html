@@ -79,9 +79,9 @@
 <div class="container">
   <div class="question-box">
     <div class="question" id="questionText">પ્રશ્ન લોડ થઇ રહ્યો છે...</div>
-    <div class="option" id="optionA" onclick="selectOption('A')"><span>A</span> વિકલ્પ A</div>
-    <div class="option" id="optionB" onclick="selectOption('B')"><span>B</span> વિકલ્પ B</div>
-    <div class="option" id="optionC" onclick="selectOption('C')"><span>C</span> વિકલ્પ C</div>
+    <div class="option" id="optionA" onclick="selectOption('A')"><span>A</span></div>
+    <div class="option" id="optionB" onclick="selectOption('B')"><span>B</span></div>
+    <div class="option" id="optionC" onclick="selectOption('C')"><span>C</span></div>
   </div>
 
   <div class="scorebar">
@@ -116,7 +116,8 @@
   });
 
   function startQuiz() {
-    fetch('questions.json')
+    const fileName = (lang === 'en') ? 'questions_en.json' : 'questions_gu.json';
+    fetch(fileName)
       .then(res => res.json())
       .then(data => {
         allQuestions = data.questions;
@@ -141,8 +142,7 @@
 
   function showQuestion() {
     let q = selectedQuestions[currentQuestionIndex];
-    let qText = lang === 'en' ? q.question_en : q.question;
-    document.getElementById("questionText").textContent = `Q.${currentQuestionIndex + 1}: ${qText}`;
+    document.getElementById("questionText").textContent = `Q.${currentQuestionIndex + 1}: ${q.question}`;
 
     let shuffledOptions = shuffleArray(q.options.slice());
     optionMap = { 'A': shuffledOptions[0], 'B': shuffledOptions[1], 'C': shuffledOptions[2] };
@@ -171,31 +171,9 @@
     clearInterval(countdown);
     currentQuestionIndex++;
     if (currentQuestionIndex >= selectedQuestions.length) {
-      // Future: store userAnswers
       window.location.href = `result.html?total=${total}&lang=${lang}`;
     } else {
       document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${total}`;
-      showQuestion();
-      startTimer();
-    }
-  }
-
-  function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
-  startQuiz();
-</script>
-
-</body>
-</html>
-      window.location.href = `result.html?correct=${correct}&total=${selectedQuestions.length}`;
-    } else {
-      document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${selectedQuestions.length}`;
       showQuestion();
       startTimer();
     }
