@@ -2,117 +2,71 @@
 <html lang="gu">
 <head>
   <meta charset="UTF-8">
-  <title>Result</title>
+  <title>સ્કોરકાર્ડ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #fff; }
-    header { background: #222; padding: 15px; text-align: center; }
-    header h1 { margin: 0; font-size: 22px; }
     .container { padding: 20px; }
-    .summary {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .summary img { width: 120px; margin-bottom: 10px; }
-    .summary h2 { margin: 10px 0; font-size: 22px; }
-    .summary p { font-size: 16px; }
-    .question-result {
+    h1 { text-align: center; font-size: 24px; margin-bottom: 20px; }
+    .question-block {
       background: #1e1e1e;
-      padding: 15px;
-      border-radius: 6px;
+      padding: 18px;
       margin-bottom: 15px;
+      border-radius: 8px;
     }
-    .question-result h3 { margin: 0 0 10px 0; font-size: 18px; }
-    .correct { color: #4caf50; }
-    .wrong { color: #f44336; }
-    .btn-group a {
+    .question-block.correct { border-left: 5px solid #4caf50; }
+    .question-block.wrong { border-left: 5px solid #f44336; }
+    .question { font-size: 16px; margin-bottom: 10px; }
+    .answer { font-size: 14px; margin-top: 5px; color: #ccc; }
+    .btn {
       display: inline-block;
-      margin: 10px 5px 0;
-      padding: 12px 18px;
+      padding: 12px 20px;
       background: #ffcc00;
       color: #000;
-      text-decoration: none;
       border-radius: 6px;
-      font-size: 15px;
+      text-decoration: none;
+      font-size: 16px;
       font-weight: bold;
+      margin: 15px 5px;
     }
-    .btn-group a:hover { background: #ffd633; }
+    .btn:hover { background: #ffd633; }
   </style>
 </head>
 <body>
 
-<header>
-  <h1 id="title">Result</h1>
-</header>
-
 <div class="container">
-
-  <div class="summary">
-    <img id="resultImage" src="pass.png" alt="Result">
-    <h2 id="resultTitle">તમારું પરિણામ</h2>
-    <p id="scoreText"></p>
+  <h1 id="title">સ્કોરકાર્ડ</h1>
+  <div id="resultList"></div>
+  <div style="text-align:center;">
+    <a class="btn" href="index.html">હોમ પેજ</a>
   </div>
-
-  <div id="results"></div>
-
-  <div class="btn-group">
-    <a href="#" onclick="retakeExam()">🔄 Retake Exam</a>
-    <a href="index.html" id="homeLink">🏠 Home</a>
-  </div>
-
 </div>
 
 <script>
   const urlParams = new URLSearchParams(window.location.search);
-  const correct = parseInt(urlParams.get('correct')) || 0;
-  const total = parseInt(urlParams.get('total')) || 0;
   const lang = urlParams.get('lang') || 'gu';
+
   const resultData = JSON.parse(localStorage.getItem('quizResult')) || [];
 
-  const passPercent = 70;
-  const percent = (correct / total) * 100;
-  const isPass = percent >= passPercent;
+  if (lang === 'en') {
+    document.title = "Score Card";
+    document.getElementById("title").textContent = "Score Card";
+  }
 
-  document.getElementById("title").textContent = lang === 'en' ? "Result" : "પરિણામ";
-  document.getElementById("resultTitle").textContent = isPass ? (lang === 'en' ? "You Passed!" : "તમારે પાસ થયાં!") : (lang === 'en' ? "You Failed!" : "તમે નિષ્ફળ!");
+  let listHTML = "";
 
-// Set image based on result
-  document.getElementById("resultImage").src = isPass ? "pass.png" : "fail.png";
-
-// Score Text
-  document.getElementById("scoreText").textContent = (lang === 'en'
-    ? `You answered ${correct} out of ${total} questions correctly (${percent.toFixed(0)}%).`
-    : `તમે કુલ ${total} માંથી ${correct} સચોટ જવાબ આપ્યાં છે (${percent.toFixed(0)}%).`);
-
-// Home link lang pass
-  document.getElementById("homeLink").href = "index.html?lang=" + lang;
-
-  // Question Wise Result
-  const resultsDiv = document.getElementById("results");
   resultData.forEach((item, index) => {
-    const div = document.createElement("div");
-    div.className = "question-result";
-
-    const ques = document.createElement("h3");
-    ques.textContent = `${index + 1}. ${item.question}`;
-    div.appendChild(ques);
-
-    const selected = document.createElement("p");
-    if (item.isCorrect) {
-      selected.innerHTML = `✅ ${item.selected}`;
-      selected.className = "correct";
-    } else {
-      selected.innerHTML = `❌ ${item.selected}<br><small>${lang === 'en' ? 'Correct Answer' : 'સાચો જવાબ'}: ✅ ${item.correct}</small>`;
-      selected.className = "wrong";
-    }
-    div.appendChild(selected);
-
-    resultsDiv.appendChild(div);
+    let blockClass = item.isCorrect ? "correct" : "wrong";
+    listHTML += `
+      <div class="question-block ${blockClass}">
+        <div class="question">${index + 1}. ${item.question}</div>
+        <div>✅ ${item.selected}</div>
+        ${!item.isCorrect ? `<div class="answer">Correct: ${item.correct}</div>` : ""}
+      </div>
+    `;
   });
 
-  function retakeExam() {
-    window.history.back();
-  }
+  document.getElementById("resultList").innerHTML = listHTML;
 </script>
 
 </body>
