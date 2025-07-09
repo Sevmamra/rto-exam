@@ -1,0 +1,44 @@
+{
+  "questions": [
+    {
+      "question": "What should you do at a pedestrian crossing?",
+      "options": ["Stop the vehicle", "Honk", "Give way"],
+      "answer": "Stop the vehicle"
+    },
+    {
+      "question": "If another vehicle is coming from the opposite side on a narrow bridge, what should you do?",
+      "options": ["Move ahead", "Go back", "Give way"],
+      "answer": "Give way"
+    },
+    {
+      "question": "In case of an accident with injuries, what is your duty?",
+      "options": ["Inform police", "Ignore", "Hide details"],
+      "answer": "Inform police"
+    },
+    {
+      "question": "What should not be done on a one-way road?",
+      "options": ["Reverse the vehicle", "Honk", "Overtake"],
+      "answer": "Reverse the vehicle"
+    },
+    {
+      "question": "From which side should you overtake?",
+      "options": ["Right side", "Left side", "Without permission"],
+      "answer": "Right side"
+    },
+    {
+      "question": "While parking a vehicle at night, what should you do?",
+      "options": ["Turn off lights", "Keep parking lights on", "Park on road"],
+      "answer": "Keep parking lights on"
+    },
+    {
+      "question": "On seeing an ambulance, what should you do?",
+      "options": ["Give way", "Block the way", "Ignore"],
+      "answer": "Give way"
+    },
+    {
+      "question": "At an unmanned railway crossing, what should you do?",
+      "options": ["Cross quickly", "Check and cross", "Honk loudly"],
+      "answer": "Check and cross"
+    }
+  ]
+}
