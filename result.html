@@ -17,8 +17,9 @@
       color: #000;
       border-radius: 6px;
       text-decoration: none;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
+      margin: 10px;
     }
     .btn:hover { background: #ffd633; }
   </style>
@@ -29,7 +30,11 @@
   <h1 id="resultTitle">પરિણામ લોડ થઇ રહ્યું છે...</h1>
   <img id="resultImg" src="" alt="Result">
   <div class="score" id="scoreText"></div>
-  <a id="retryBtn" class="btn" href="#">ફરી પરીક્ષા આપો</a>
+  <div>
+    <a id="retryBtn" class="btn" href="#">ફરી પરીક્ષા આપો</a>
+    <a id="scoreCardBtn" class="btn" href="#">સ્કોરકાર્ડ જુઓ</a>
+    <a id="homeBtn" class="btn" href="index.html">હોમ પેજ</a>
+  </div>
 </div>
 
 <script>
@@ -38,8 +43,7 @@
   const correct = parseInt(urlParams.get('correct')) || 0;
   const lang = urlParams.get('lang') || 'gu';
 
-  let passMark = Math.ceil(total * 0.66); // 66% passing
-
+  let passMark = Math.ceil(total * 0.66);
   const isPass = correct >= passMark;
 
   if (lang === 'en') {
@@ -47,16 +51,20 @@
     document.getElementById("resultTitle").textContent = isPass ? "Congratulations! You Passed!" : "Sorry, You Failed.";
     document.getElementById("scoreText").textContent = `You answered ${correct} out of ${total} correctly.`;
     document.getElementById("retryBtn").textContent = "Retake Exam";
+    document.getElementById("scoreCardBtn").textContent = "View Score Card";
+    document.getElementById("homeBtn").textContent = "Home Page";
   } else {
     document.getElementById("resultTitle").textContent = isPass ? "અભિનંદન! તમે પાસ થયા!" : "માફ કરશો, તમે નાપાસ થયા!";
     document.getElementById("scoreText").textContent = `તમે ${total} માંથી ${correct} પ્રશ્ન સાચા આપ્યા.`;
     document.getElementById("retryBtn").textContent = "ફરી પરીક્ષા આપો";
+    document.getElementById("scoreCardBtn").textContent = "સ્કોરકાર્ડ જુઓ";
+    document.getElementById("homeBtn").textContent = "હોમ પેજ";
   }
 
   document.getElementById("resultImg").src = isPass ? "pass.png" : "fail.png";
 
   document.getElementById("retryBtn").href = `exam.html?lang=${lang}`;
-
+  document.getElementById("scoreCardBtn").href = `scorecard.html?lang=${lang}`;
 </script>
 
 </body>
