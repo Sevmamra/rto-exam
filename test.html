@@ -16,17 +16,32 @@
     .container {
       max-width: 450px;
       margin: 0 auto;
-    }
-    .score-box {
-      background-color: #f5f5f5;
-      color: #333;
-      padding: 15px;
-      border-radius: 8px;
       text-align: center;
-      font-size: 22px;
+    }
+    .title {
+      font-size: 30px;
+      font-weight: 700;
+      padding: 15px 0;
+      background: #e0e0e0;
+      color: #333;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+    .score-strip {
+      background-color: #910091;
+      padding: 12px;
+      font-size: 18px;
       font-weight: 600;
-      border: 3px solid #910091;
+      border-radius: 5px;
       margin-bottom: 20px;
+      animation: scrollText 8s linear infinite;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    @keyframes scrollText {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
     }
     .result-card {
       background: #222;
@@ -34,6 +49,7 @@
       padding: 15px;
       margin-bottom: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+      text-align: left;
     }
     .correct {
       border-left: 6px solid #28a745;
@@ -86,10 +102,12 @@
 <body>
 
   <div class="container">
-    <div class="score-box">You Scored 1 out of 2</div>
+    <div class="title">SCORE CARD</div>
+
+    <div class="score-strip">You Scored 1 out of 2</div>
 
     <div class="result-card correct">
-      <p>1️⃣ What should you do at an unmanned railway crossing?</p>
+      <p>1.What should you do at an unmanned railway crossing?</p>
       <div class="answer">
         <i class="fa-solid fa-check-circle" style="color: #28a745;"></i>
         <span class="correct-answer">Stop and check carefully</span>
@@ -97,7 +115,7 @@
     </div>
 
     <div class="result-card incorrect">
-      <p>2️⃣ From which side should you overtake?</p>
+      <p>2.From which side should you overtake?</p>
       <div class="answer">
         <i class="fa-solid fa-xmark-circle wrong-answer"></i>
         <span class="wrong-answer">From behind</span>
@@ -110,7 +128,7 @@
 
     <div class="button-row">
       <button class="button"><i class="fa-solid fa-arrow-left icon"></i>Back</button>
-      <button class="button"><i class="fa-solid fa-rotate-right icon"></i>Retake Exam</button>
+      <button class="button"><i class="fa-solid fa-rotate-right icon"></i>Retake</button>
       <button class="button"><i class="fa-solid fa-house icon"></i>Home</button>
     </div>
   </div>
