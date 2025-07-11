@@ -116,7 +116,7 @@
       .then(res => res.json())
       .then(data => {
         allQuestions = data.questions;
-        // अगर questionCount जितने question नहीं है तो जितने available हैं उतने ही लो
+        
         let count = Math.min(questionCount, allQuestions.length);
         selectedQuestions = shuffleArray(allQuestions).slice(0, count);
         showQuestion();
@@ -136,17 +136,30 @@
   }
 
   function showQuestion() {
-    clearOptions();
-    let q = selectedQuestions[currentQuestionIndex];
-    document.getElementById("questionText").textContent = `${currentQuestionIndex + 1}. ${q.question}`;
-    let shuffledOptions = shuffleArray(q.options.slice());
-    optionMap = { 'A': shuffledOptions[0], 'B': shuffledOptions[1], 'C': shuffledOptions[2] };
+  clearOptions();
+  let q = selectedQuestions[currentQuestionIndex];
 
-    document.getElementById("optionA").innerHTML = `<span>A</span> ${optionMap['A']}`;
-    document.getElementById("optionB").innerHTML = `<span>B</span> ${optionMap['B']}`;
-    document.getElementById("optionC").innerHTML = `<span>C</span> ${optionMap['C']}`;
-    document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${selectedQuestions.length}`;
+  
+  let questionHTML = `${currentQuestionIndex + 1}. ${q.question}`;
+
+  
+  if (q.image && q.image !== "") {
+    questionHTML += `<br><img src="images/${q.image}" style="max-width:100%;margin-top:10px;border-radius:8px;">`;
   }
+
+  document.getElementById("questionText").innerHTML = questionHTML;
+
+  
+  let shuffledOptions = shuffleArray(q.options.slice());
+  optionMap = { 'A': shuffledOptions[0], 'B': shuffledOptions[1], 'C': shuffledOptions[2] };
+
+  document.getElementById("optionA").innerHTML = `<span>A</span> ${optionMap['A']}`;
+  document.getElementById("optionB").innerHTML = `<span>B</span> ${optionMap['B']}`;
+  document.getElementById("optionC").innerHTML = `<span>C</span> ${optionMap['C']}`;
+
+  // Question number update
+  document.getElementById("questionNo").textContent = `${currentQuestionIndex + 1}/${selectedQuestions.length}`;
+}
 
   function clearOptions() {
     ['A', 'B', 'C'].forEach(opt => {
