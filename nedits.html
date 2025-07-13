@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nedit's Edition</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #910091;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #333;
+            overflow: hidden;
+        }
+        nav a {
+            float: left;
+            display: block;
+            color: #fff;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        .hero {
+            padding: 50px;
+            text-align: center;
+            background-color: #eee;
+        }
+        .hero h1 {
+            margin-bottom: 10px;
+        }
+        .section {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .services {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .service-card {
+            background-color: white;
+            padding: 20px;
+            margin: 15px;
+            flex: 1 1 250px;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        form button {
+            background-color: #910091;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #730073;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Nedit's Edition</h1>
+    <p>Your Digital Creative Partner</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<div class="hero" id="home">
+    <h1>Welcome to Nedit's Edition</h1>
+    <p>We make your digital presence unforgettable.</p>
+</div>
+
+<div class="section" id="about">
+    <h2>About Us</h2>
+    <p>Nedit's Edition is a creative brand focused on digital content, video editing, website creation and social media growth strategies. We believe in delivering innovative solutions tailored for every client.</p>
+</div>
+
+<div class="section" id="services">
+    <h2>Our Services</h2>
+    <div class="services">
+        <div class="service-card">
+            <h3>Website Design</h3>
+            <p>We create modern, responsive, and SEO-friendly websites for businesses and individuals.</p>
+        </div>
+        <div class="service-card">
+            <h3>Video Editing</h3>
+            <p>High-quality video edits for reels, YouTube videos, and promotional content.</p>
+        </div>
+        <div class="service-card">
+            <h3>Social Media Management</h3>
+            <p>Boost your online presence with our tailored social media growth services.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section" id="contact">
+    <h2>Contact Us</h2>
+    <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea rows="5" placeholder="Your Message"></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+</div>
+
+<footer>
+    <p>&copy; 2025 Nedit's Edition. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
